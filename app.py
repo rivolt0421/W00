@@ -111,6 +111,7 @@ def login():
     }
 
     token = jwt.encode(payload, "MY_SECRET_KEY", "HS256")
+    
     return jsonify({"access_token": token})
 
 
