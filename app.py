@@ -28,6 +28,19 @@ def get_user(user_id):
         else None
     )
 
+def get_post(post_id):
+    post = db.posts.find_one({"_id" : ObjectId(post_id)})
+
+    return (
+        {
+            "url": post["url"],
+            "project": post["project"],
+            "reasons": post["reasons"],
+            "quizs": post["quizs"],
+        }
+        if post
+        else None
+    )
 
 def login_required(f):
     @wraps(f)
@@ -57,7 +70,24 @@ def login_required(f):
 def find_user_by_email(email):
     return db.users.find_one({"email": email})
 
+@app.route("/post/<post_id>", methods=['GET'])
+#@login_required
+def post_detail(post_id):
+    post = db.posts.find_one({"_id" : ObjectId(post_id)})
+    url = post['url']
+    reasons = post['reasons']
+    quizs = post['quizs']
+    return render_template("post.html", url=url, reasons=reasons, quizs=quizs)
 
+@app.route("/modify/<post_id>", methods=['GET'])
+#@login_required
+def post_modify(post_id):
+    post = db.posts.find_one({"_id" : ObjectId(post_id)})
+    url = post['url']
+    reasons = post['reasons']
+    quizs = post['quizs']
+    return render_template("post-modify.html", url=url, reasons=reasons, quizs=quizs)
+    
 @app.route("/")
 @login_required
 def hello_world():
