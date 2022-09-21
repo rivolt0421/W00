@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="/static/css/font.css">
     <script src="/static/script/dropdown.js"></script>
     <script src="/static/script/progress-bar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
 </head>
 
 <body class="h-full">
@@ -169,7 +172,7 @@
 
         <header class="bg-white shadow">
             <div class="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900">W00-8조</h1>
+                <h1 class="text-3xl font-bold tracking-tight text-gray-900">프로젝트 생성</h1>
             </div>
         </header>
         <main>
@@ -227,163 +230,98 @@
                     <div>
                         <div class="">
                             <form action="#" method="POST"
-                                class="mt-5 grid md:grid-cols-2 md:gap-4 md:col-span-3 md:mt-0 bg-gray-200 p-4 rounded-md">
-                                <div class="shadow sm:overflow-hidden sm:rounded-md">
+                                class="mt-5 grid md:grid-cols-2 md:gap-4 md:mt-0 bg-gray-200 py-4 px-12 rounded-md">
+                                <div class="shadow col-span-2 sm:overflow-hidden sm:rounded-md">
                                     <div class="h-full bg-white px-4 py-5 sm:p-6">
-                                        <div class="grid grid-col-1 gap-6">
-                                            <div class="">
-                                                <legend class="text-xl font-bold">POST</legend>
-                                            </div>
-                                            <div>
-                                                <label for="company-website"
-                                                    class="block text-md font-medium text-gray-700">URL</label>
+                                        <div class="grid grid-cols-2 gap-10">
+                                            <div class="col-span-1">
+                                                <label for="project-name"
+                                                    class="block text-lg font-medium text-gray-700 font-bold">프로젝트
+                                                    제목</label>
                                                 <div
-                                                    class="box-border mt-1 mb-4 flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                    <input type="url" name="company-website" id="company-website"
-                                                        class="p-2 text-xl block w-full flex-1 rounded-none rounded-x-md focus:outline-0"
-                                                        placeholder="www.example.com" autocomplete="off">
+                                                    class="w-9/12 relative block box-border mt-4 mb-4 rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
+                                                    <input id="project-name" type="text"
+                                                        class="p-2 text-xl rounded-none rounded-x-md focus:outline-0"
+                                                        placeholder="제목을 입력하세요." autocomplete="off" required>
                                                 </div>
-                                            </div>
-                                            <div>
-                                                <div>
-                                                    <label for="reason-1"
-                                                        class="block text-md font-medium text-gray-700">읽어야할 이유
-                                                        1.</label>
-                                                    <div
-                                                        class="mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                        <input type="text" name="reason-1" id="reason-1"
-                                                            class="p-2 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                            autocomplete="off" placeholder="이유를 적어주세요.">
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <label for="reason-2"
-                                                        class="block text-md font-medium text-gray-700">읽어야할 이유
-                                                        2.</label>
-                                                    <div
-                                                        class="mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                        <input type="text" name="reason-2" id="reason-2"
-                                                            class="p-2 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                            autocomplete="off" placeholder="이유를 적어주세요.">
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <label for="reason-3"
-                                                        class="block text-md font-medium text-gray-700">읽어야할 이유
-                                                        3.</label>
-                                                    <div
-                                                        class="mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                        <input type="text" name="reason-3" id="reason-3"
-                                                            class="p-2 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                            autocomplete="off" placeholder="이유를 적어주세요.">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                                <div class="py-4">
 
-                                </div>
-                                <div>
-                                    <div class="h-full shadow sm:overflow-hidden sm:rounded-md">
-                                        <div class="h-full space-y-6 bg-white px-4 py-5 sm:p-6">
-                                            <div class="grid grid-col-1 gap-6">
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-span-1 h-full">
+                                                <label for="member-email"
+                                                    class="block text-lg font-medium text-gray-700 font-bold mb-4">Email</label>
+                                                <label class="relative block">
+                                                    <span class="sr-only">Search</span>
+                                                    <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 20 20" stroke-width="1.5" stroke="currentColor"
+                                                            class="ml-1 h-4 w-4 opacity-30">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                                        </svg>
+
+                                                    </span>
+                                                    <input id="member-email" type="text"
+                                                        placeholder="example@whatever.com" required
+                                                        class="text-lg inline-block mr-2 placeholder:italic placeholder:text-slate-400 block bg-white w-80 border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1" />
+                                                    <button type="button" onclick="appendMember()"
+                                                        class="inline-block inline-flex justify-center rounded-md border border-transparent bg-sky-400 py-2 px-4 text-bs font-medium text-white shadow-sm hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">추가</button>
+                                                </label>
+
+
+                                            </div>
+                                            <div class="col-span-2 h-full">
+                                                <label for="member-email"
+                                                    class="block text-lg font-medium text-gray-700 font-bold mb-4">팀원</label>
                                                 <div class="">
-                                                    <legend class="text-xl font-bold">QUIZ</legend>
-                                                </div>
-                                                <div class="px-4">
-                                                    <div class="flex mb-2">
-                                                        <label for="quiz-1"
-                                                            class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-700">Q1.</label>
+                                                    <div id="member-container" class=" grid grid-cols-11 gap-4">
                                                         <div
-                                                            class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                            <input type="text" name="quiz-1" id="quiz-1"
-                                                                class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="문제 1">
+                                                            class="col-span-1 inline-block inline-flex justify-between rounded-md border border-transparent bg-gray-500 py-1 px-1 text-sm font-medium text-white shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer">
+                                                            <span class="member-email"
+                                                                style="display: none;">2wheeh@gmail.com</span>
+                                                            <span>이원희</span>
+                                                            <span class="badge badge-light cursor-pointer pl-1"
+                                                                onclick="deleteMember(this)">X&nbsp</span>
                                                         </div>
-
-                                                    </div>
-                                                    <div class="flex mb-2">
-                                                        <label for="answer-1"
-                                                            class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-700">A1.</label>
                                                         <div
-                                                            class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                            <input type="text" name="answer-1" id="answer-1"
-                                                                class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="정답 1">
+                                                            class="col-span-1 inline-block inline-flex justify-between rounded-md border border-transparent bg-gray-500 py-1 px-1 text-sm font-medium text-white shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer">
+                                                            <span class="member-email"
+                                                                style="display: none;">dlrkddnr0421@daum.net</span>
+                                                            <span>이강욱</span>
+                                                            <span class="badge badge-light cursor-pointer pl-1"
+                                                                onclick="deleteMember(this)">&nbspX&nbsp</span>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="px-4">
-                                                    <div class="flex mb-1">
-                                                        <label for="quiz-2"
-                                                            class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-700">Q2.</label>
                                                         <div
-                                                            class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                            <input type="text" name="quiz-2" id="quiz-2"
-                                                                class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="문제 2">
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex mb-1">
-                                                        <label for="answer-2"
-                                                            class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-700">A2.</label>
-                                                        <div
-                                                            class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                            <input type="text" name="answer-2" id="answer-2"
-                                                                class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="정답 2">
+                                                            class="col-span-1 inline-block inline-flex justify-between rounded-md border border-transparent bg-gray-500 py-1 px-1 text-sm font-medium text-white shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer">
+                                                            <span class="member-email"
+                                                                style="display: none;">2wheeh@gmail.com</span>
+                                                            <span>신종우</span>
+                                                            <span class="badge badge-light cursor-pointer pl-1"
+                                                                onclick="deleteMember(this)">&nbspX&nbsp</span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="px-4">
-                                                    <div class="flex mb-1">
-                                                        <label for="quiz-3"
-                                                            class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-700">Q3.</label>
-                                                        <div
-                                                            class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                            <input type="text" name="quiz-3" id="quiz-3"
-                                                                class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="문제 3">
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex mb-1">
-                                                        <label for="answer-3"
-                                                            class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-700">A3.</label>
-                                                        <div
-                                                            class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                            <input type="text" name="answer-3" id="answer-3"
-                                                                class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="정답 3">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-
-
-
                                             </div>
-
-
-
                                         </div>
                                     </div>
 
                                 </div>
+
                                 <div class="col-start-2 text-right px-2">
                                     <button type="button"
                                         class="mr-1 inline-flex justify-center rounded-md border border-transparent bg-gray-400 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">뒤로</button>
-                                    <button type="submit"
-                                        class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">포스팅</button>
+                                    <button type="submit" onclick="submitProject()"
+                                        class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">프로젝트
+                                        생성</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-
-
-
-
 
                 <!-- More products... -->
             </div>
@@ -391,6 +329,96 @@
     </div>
     </main>
     </div>
+    <script>
+        const makeBadge = member => `<div class="btn btn-sm btn-secondary">
+                <span class="member-email" style="display: none;">${member.email}</span>
+                <span>${member.name}</span>
+                <span class="badge badge-light" onclick="deleteMember(this)">X</span>
+              </div>`
+
+        const appendMember = () => {
+            const email = $("#member-email").val()
+
+            if (email === '') {
+                alert("이메일을 입력해주세요.");
+                return;
+            }
+
+            const members = [...$("#member-container").children()]
+                .map((x) => x.children[0].innerText)
+
+            if (members.find(x => email === x)) {
+                alert("이미 추가된 팀원입니다.");
+                return;
+            }
+
+            $.ajax({
+                type: 'GET',
+                url: `/users?email=${email}`,
+            })
+                .then(member => {
+                    const badge = makeBadge(member)
+                    $("#member-container").append(badge)
+                })
+                .fail(res => {
+                    if (res.status === 404) alert("존재하지 않는 회원입니다.");
+                    else if (res.status === 500) alert("서버 오류!");
+                    else alert("예상치 못한 오류가 발생했습니다.")
+                })
+        }
+
+        const deleteMember = ele => {
+            ele.parentElement.outerHTML = ""
+        }
+
+        const submitProject = () => {
+            const members = [...$("#member-container").children()]
+                .map((x) => {
+                    const email = x.children[0].innerText
+                    const name = x.children[1].innerText
+
+                    return { email, name }
+                })
+
+            const projectName = $("#project-name").val()
+            if (projectName === "") {
+                alert("프로젝트 제목을 입력해주세요.")
+                return
+            }
+
+            if (members.length === 0) {
+                alert("팀원을 1명 이상 등록해주세요")
+                return
+            }
+
+            const payload = {
+                "name": projectName,
+                "members": [...members],
+                "posts": []
+            }
+
+            console.log(payload)
+
+            $.ajax({
+                type: 'POST',
+                url: "/projects",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(payload),
+            })
+                .then(res => {
+                    if (res["result"] !== "success") throw "Error"
+                    alert("저장 완료!");
+                    window.location.reload();
+                })
+                .fail(res => {
+                    if (res.status === 400) alert("잘못된 요청입니다.");
+                    else if (res.status === 500) alert("서버 오류!");
+                    else alert("예상치 못한 오류가 발생했습니다.")
+                })
+
+
+        }
+    </script>
 </body>
 
 </html>
