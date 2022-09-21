@@ -79,6 +79,7 @@ def get_post(post_id):
 
     return (
         {
+            "post_id": post_id,
             "url": post["url"],
             "project": post["project"],
             "reasons": post["reasons"],
@@ -107,7 +108,6 @@ def do_scrap(url):
 
     return( 
         {   
-            "url": url,
             "img": img,
             "title": title
         }
@@ -253,12 +253,21 @@ def render_post_dashboard():
     members = project["members"]
     posts = project["posts"]
     post_metas = []
-    
+
     for post_id in posts:
         post = get_post(post_id)
         url = post["url"]
 
-        post_meta = do_scrap(url)
+        url_meta = do_scrap(url)
+        img = url_meta["img"]
+        title = url_meta["title"]
+
+        post_meta = {
+            "post_id" : post_id,
+            "url" : url,
+            "img" : img,
+            "title" : title
+        }
         post_metas.append(post_meta)
         # user progress 추가 필요
 
