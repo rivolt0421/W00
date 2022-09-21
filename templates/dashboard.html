@@ -171,22 +171,43 @@
       <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <!-- Replace with your content -->
         <div class="px-8 py-8 rounded-lg border-4 border-dashed border-gray-200">
-          <div class="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0">
-
+          <div id="container" class="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-6 lg:space-y-0">
             <div class="group relative mb-4">
-              <div
-                class="bg-gray-100 p-4 relative h-80 w-full rounded-lg group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1">
+              <a href="/create-project">
                 <div
-                  class="h-full w-full object-cover object-center border-4 flex justify-center items-center bg-gray-100 transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-110 duration-300 cursor-pointer">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-12 h-12 stroke-gray-300">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                  </svg>
+                  class="bg-gray-100 p-4 relative h-80 w-full rounded-lg group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1">
+                  <div
+                    class="h-full w-full object-cover object-center border-4 flex justify-center items-center bg-gray-100 transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-110 duration-300 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                      stroke="currentColor" class="w-12 h-12 stroke-gray-300">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                  </div>
                 </div>
-              </div>
+              </a>
             </div>
 
+            {% for project in projects %}
             <div class="group relative mb-4">
+              <a href="{{ '/post-dashboard/%s'%project.id }}">
+                <div
+                  class="post p-6 flex flex-col justify-evenly border-2 border-slate-400 relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1 transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-105 duration-300 cursor-pointer">
+                  <h2 class="text-2xl font-semibold">{{ project.name }}</h2>
+                  <p class="text-gray-500 italic ml-2">{{ project["members"] }}명</p>
+                  <div class="flex">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                      stroke="currentColor" class="w-6 h-6 mr-2">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span> {{ project['solved_posts'] }} / {{ project['total_posts'] }} </span>
+                  </div>
+                </div>
+              </a>
+            </div>
+            {% endfor %}
+
+            <!-- <div class="group relative mb-4">
               <div
                 class="post p-6 flex flex-col justify-evenly border-2 border-slate-400 relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1 transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-105 duration-300 cursor-pointer">
                 <h2 class="text-2xl font-semibold">깃허브 스터디</h2>
@@ -230,7 +251,7 @@
                   <span>3 / 5</span>
                 </div>
               </div>
-            </div>
+            </div> -->
 
           </div>
 
@@ -242,6 +263,18 @@
   </main>
   </div>
   <script>
+
+    const token = "";
+
+    $(document).ready(function () {
+      const token = (getCookie('token') || '').split('=')[1];
+
+      [...$('#container').children()]
+        .map(x => x.children[0])
+        .forEach(x => { x.href += `?token=${token}` });
+    })
+
+
     function getCookie(name) {
       return document.cookie.split(';').filter(function (item) {
         return item.indexOf(name) !== -1;
@@ -262,7 +295,8 @@
       location.href = 'login'
     }
   </script>
-  {{ projects }}
+
+
 </body>
 <div>
 
