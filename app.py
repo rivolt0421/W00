@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 from functools import wraps
+from multiprocessing import current_process
 from os import access
 from unittest import result
-from flask import Flask, jsonify, request, Response, g ,redirect, url_for 
+from flask import Flask, jsonify, request, Response, g, redirect, url_for
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask import render_template
@@ -33,8 +34,9 @@ def get_user(user_id):
         else None
     )
 
+
 def get_post(post_id):
-    post = db.posts.find_one({"_id" : ObjectId(post_id)})
+    post = db.posts.find_one({"_id": ObjectId(post_id)})
 
     return (
         {
@@ -47,10 +49,11 @@ def get_post(post_id):
         else None
     )
 
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        access_token = request.args.get('token')
+        access_token = request.args.get("token")
         if access_token is not None:
             try:
                 payload = jwt.decode(access_token, "MY_SECRET_KEY", "HS256")
@@ -58,14 +61,14 @@ def login_required(f):
                 payload = None
 
             if payload is None:
-                return redirect(url_for('login'))
+                return redirect(url_for("login"))
 
             user_id = payload["user_id"]
             # g: global context
             g.user_id = user_id
             g.user = get_user(user_id) if user_id else None
         else:
-            return redirect(url_for('login'))
+            return redirect(url_for("login"))
 
         return f(*args, **kwargs)
 
@@ -75,14 +78,17 @@ def login_required(f):
 def find_user_by_email(email):
     return db.users.find_one({"email": email})
 
-@app.route("/post/<post_id>", methods=['GET'])
-#@login_required
+
+@app.route("/post/<post_id>", methods=["GET"])
+@login_required
 def post_detail(post_id):
-    post = db.posts.find_one({"_id" : ObjectId(post_id)})
-    url = post['url']
-    reasons = post['reasons']
-    quizs = post['quizs']
+    post = db.posts.find_one({"_id": ObjectId(post_id)})
+    url = post["url"]
+    reasons = post["reasons"]
+    quizs = post["quizs"]
     return render_template("post.html", url=url, reasons=reasons, quizs=quizs)
+
+
 def get_project(pjt_id):
     project = db.projects.find_one({"_id": ObjectId(pjt_id)})
 
@@ -90,11 +96,12 @@ def get_project(pjt_id):
         {
             "name": project["name"],
             "members": project["members"],
-            "posts": project["posts"]
+            "posts": project["posts"],
         }
         if project
         else None
     )
+
 
 def get_post(post_id):
     post = db.posts.find_one({"_id": ObjectId(post_id)})
@@ -105,46 +112,45 @@ def get_post(post_id):
             "url": post["url"],
             "project": post["project"],
             "reasons": post["reasons"],
-            "quizs": post["quizs"]
+            "quizs": post["quizs"],
         }
         if post
         else None
     )
- 
+
+
 def do_scrap(url):
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36"
+    }
     data = requests.get(url, headers=headers)
-    soup = BeautifulSoup(data.text, 'html5lib')
+    soup = BeautifulSoup(data.text, "html5lib")
     img = soup.select_one('meta[property="og:image"]')
     title = soup.select_one('meta[property="og:title"]')
-    
-    if title is None :
-        title = soup.select_one('title').text
-    else :
-        title = title['content']
 
-    if img is None :
+    if title is None:
+        title = soup.select_one("title").text
+    else:
+        title = title["content"]
+
+    if img is None:
         img = ""
-    else :
-        img = img['content'].strip()
+    else:
+        img = img["content"].strip()
 
-    return( 
-        {   
-            "img": img,
-            "title": title
-        }
-    )    
+    return {"img": img, "title": title}
 
 
-@app.route("/modify/<post_id>", methods=['GET'])
-#@login_required
+@app.route("/modify/<post_id>", methods=["GET"])
+# @login_required
 def post_modify(post_id):
-    post = db.posts.find_one({"_id" : ObjectId(post_id)})
-    url = post['url']
-    reasons = post['reasons']
-    quizs = post['quizs']
+    post = db.posts.find_one({"_id": ObjectId(post_id)})
+    url = post["url"]
+    reasons = post["reasons"]
+    quizs = post["quizs"]
     return render_template("post-modify.html", url=url, reasons=reasons, quizs=quizs)
-    
+
+
 @app.route("/")
 @login_required
 def hello_world():
@@ -197,31 +203,52 @@ def sign_up():
 def render_sign_up_page():
     return render_template("signup.html")
 
+
 @app.route("/checkToken", methods=["GET"])
 def check_token():
     return "hello"
 
-@app.route('/')
+
+@app.route("/")
 def index():
-    return redirect(url_for('login'))
+    return redirect(url_for("login"))
+
 
 @app.route("/login", methods=["GET"])
 def render_login_page():
     return render_template("login.html")
 
 
+def convert_progress(progress):
+
+    project_id = progress["projectId"]
+    project = db.projects.find_one({"_id": ObjectId(project_id)})
+    project_name = project["name"]
+    members = project["members"]
+    solved_posts = progress["solvedPosts"]
+    total_posts = project["posts"]
+
+    result = {
+        "name": project_name,
+        "id": project_id,
+        "members": members.__len__(),
+        "solved_posts": solved_posts.__len__(),
+        "total_posts": total_posts.__len__(),
+    }
+
+    return result
+
+
 @app.route("/projects", methods=["GET"])
 @login_required
 def render_prj_dashboard():
-  # 쿼리스트링으로 검증 아니면 메인
+    # 쿼리스트링으로 검증 아니면 메인
     # token = request.args.get('token')
+    current_user = g.user
+    progress = current_user["progress"]
+    result = list(map(convert_progress, progress))
 
-    projects = [
-        {"aa": 1, "bb": 2},
-        {"aa": 11, "bb": 12},
-    ]
-
-    return render_template("dashboard.html" , projects=projects)
+    return render_template("dashboard.html", projects=result)
 
 
 @app.route("/projects", methods=["POST"])
@@ -252,7 +279,7 @@ def create_project():
         user = find_user_by_email(member["email"])
         user_id = str(user["_id"])
         progress_data = {
-            "projectId": project_id,
+            "projectId": str(project_id),
             "solvedPosts": [],
             "solved": False,
         }
@@ -277,7 +304,7 @@ def login():
 
     row = find_user_by_email(email)
     if row == None or password != str(row["password"]):  # 단축 평가
-        return "", 401  # Unauthorized
+        return "", 401                                   # Unauthorized
 
     user_id = str(row["_id"])
     payload = {
@@ -286,12 +313,14 @@ def login():
     }
 
     token = jwt.encode(payload, "MY_SECRET_KEY", "HS256")
-    
+
     return jsonify({"access_token": token})
 
-@app.route("/post-dashboard", methods=["GET"])
-def render_post_dashboard():
-    pjt_id = "632a9ff17cdffa2611dbfb2c"
+
+@app.route("/post-dashboard/<pjt_id>", methods=["GET"])
+@login_required
+def render_post_dashboard(pjt_id):
+    # pjt_id = "632a9ff17cdffa2611dbfb2c"
     project = get_project(pjt_id)
     pjt_name = project["name"]
     members = project["members"]
@@ -306,16 +335,14 @@ def render_post_dashboard():
         img = url_meta["img"]
         title = url_meta["title"]
 
-        post_meta = {
-            "post_id" : post_id,
-            "url" : url,
-            "img" : img,
-            "title" : title
-        }
+        post_meta = {"post_id": post_id, "url": url, "img": img, "title": title}
         post_metas.append(post_meta)
         # user progress 추가 필요
 
-    return render_template("post-dashboard.html", post_metas = post_metas, pjt_name = pjt_name, members = members)
+    return render_template(
+        "post-dashboard.html", post_metas=post_metas, pjt_name=pjt_name, members=members
+    )
+
 
 @app.route("/post-form", methods=["GET"])
 def render_post_form():
