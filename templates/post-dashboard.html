@@ -16,6 +16,18 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/progress-bar.css')}}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css')}}" />
 </head>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            solved: '#4ade80',
+            unsolved: '#dc2626'
+          },
+        },
+      },
+    };
+  </script>
 
 <body class="h-full">
 
@@ -47,7 +59,7 @@
                                     <button type="button"
                                         class="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                                         id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                                        <span class="text-white mr-4 ml-2 text-lg">유저 이름</span>
+                                        <span class="text-white mr-4 ml-2 text-lg">{{ user.name }}</span>
                                         <img class="h-10 w-10 rounded-full"
                                             src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                                             alt="">
@@ -176,7 +188,7 @@
         <main>
             <div class="mx-auto max-w-7xl pt-14 sm:px-6 lg:px-8">
                 <!-- my -->
-                <div class="relative skillbar skillbar-my clearfix " data-percent="65%">
+                <div class="relative skillbar skillbar-my clearfix " data-percent={{ progress_rate }}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="chevron first absolute -top-10 right-1 w-8 h-8 cursor-pointer">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -184,26 +196,23 @@
 
                     <div class="skillbar-title" style="background: #88cd2a;"><span>나의 진행상황</span></div>
                     <div class="skillbar-bar" style="background: #88cd2a;"></div>
-                    <div class="skill-bar-percent">65%</div>
+                    <div class="skill-bar-percent">{{ progress_rate }}</div>
                 </div>
                 <!-- friends -->
                 <div class="friends-progress h-0 overflow-hidden">
-                    <div class="skillbar clearfix " data-percent="85%">
-                        <div class="skillbar-title" style="background: #00a8ff;"><span>홍길동</span></div>
+                    {% for member in members %}
+                    <div class="skillbar clearfix " data-percent={{ member.progress_rate }}>
+                        <div class="skillbar-title" style="background: #00a8ff;"><span>{{ member.name }}</span></div>
                         <div class="skillbar-bar" style="background: #00a8ff;"></div>
-                        <div class="skill-bar-percent">85%</div>
+                        <div class="skill-bar-percent">{{ member.progress_rate }}</div>
                     </div>
-                    <div class="skillbar clearfix " data-percent="60%">
-                        <div class="skillbar-title" style="background: #00a8ff;"><span>김아무개</span></div>
-                        <div class="skillbar-bar" style="background: #00a8ff;"></div>
-                        <div class="skill-bar-percent">60%</div>
-                    </div>
+                    {% endfor %}
                 </div>
 
             </div>
             <div class="mx-auto max-w-7xl py-2 pb-16 sm:px-6 lg:px-8">
                 <!-- Replace with your content -->
-                <div class="mt-6 space-y-12 lg:grid lg:grid-cols-4 lg:gap-x-8 lg:space-y-0">
+                <div class="mt-6 space-y-12 lg:grid lg:grid-cols-4 lg:gap-8 lg:space-y-0">
 
                     <div class="group relative mb-4">
                         <a href="/postform/{{ pjt_id }}">
@@ -222,27 +231,12 @@
 
                     </div>
 
+                        {% for item in post_metas %}
                     <div class="group relative mb-4">
                         <div
-                            class="post border-4 border-red-600 relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1 transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-105 duration-300 cursor-pointer">
+                            class="border-4 border-{{ item.solved }} relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1 transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-105 duration-300 cursor-pointer">
                             <div class="h-4/6">
-                                <img src="https://i.ytimg.com/vi/tosLBcAX1vk/maxresdefault.jpg"
-                                    alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug."
-                                    class="h-full w-full object-cover object-center">
-                            </div>
-                            <div class="h-2/6 p-4 font-bold">
-                                <p class="h-12 text-ellipsis overflow-hidden">세션 vs 토큰 vs 쿠키? 기초개념 잡아드림.
-                                    10분순삭!</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {% for item in post_metas %}
-                    <div class="group relative mb-4">
-                        <div
-                            class="border-4 border-green-400 relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1 transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-105 duration-300 cursor-pointer">
-                            <div class="h-4/6">
-                                <a href=/post/{{ item.post_id }} target="_blank">
+                                <a href= /post/{{ item.post_id }}>                     
                                     <img src={{ item.img }}
                                         alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug."
                                         class="h-full w-full object-cover object-center"></a>

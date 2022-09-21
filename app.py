@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
+import email
 from functools import wraps
-from multiprocessing import current_process
+from operator import truediv
 from os import access
 from unittest import result
 from flask import Flask, jsonify, request, Response, g, redirect, url_for
@@ -230,6 +231,16 @@ def create_post():
     post_id = insert_post(form)
 
     return redirect(f"/post/{post_id}")
+def get_single_progress(user, pjt_id):
+    for single_progress in user["progress"]:
+        if single_progress["projectId"] == pjt_id:
+            return single_progress 
+
+def get_progress_rate(single_pjt_user, project):
+    progress_rate = single_pjt_user["solvedPosts"].__len__() / project["posts"].__len__()  
+    progress_rate *= 100
+    return str(progress_rate) + '%'
+
 
 @app.route("/modify/<post_id>", methods=["GET"])
 # @login_required
@@ -417,6 +428,22 @@ def render_post_dashboard(pjt_id):
     members = project["members"]
     posts = project["posts"]
     post_metas = []
+    single_pjt_guser = []
+
+    members = list(filter(lambda m: m['email']!=g.user['email'],members))
+
+    #   progress rate = g.user[length of solvedposts] / project[length of posts] 
+    #   solved post 에 post id 있으면 solved --> post_mata에 포함
+
+    single_pjt_guser = get_single_progress(g.user, pjt_id)
+    for member in members:
+        user = find_user_by_email(member["email"])
+        single_pjt_member = get_single_progress(user, pjt_id)
+        member_progress_rate = get_progress_rate(single_pjt_member, project)
+        member['progress_rate'] = member_progress_rate
+
+    progress_rate = get_progress_rate(single_pjt_guser, project)
+
 
     for post_id in posts:
         post = get_post(post_id)
@@ -425,15 +452,21 @@ def render_post_dashboard(pjt_id):
         url_meta = do_scrap(url)
         img = url_meta["img"]
         title = url_meta["title"]
+        solved = "unsolved"
+        if post_id in single_pjt_guser["solvedPosts"]:
+            solved = "solved"
+        # member 
 
-        post_meta = {"post_id": post_id, "url": url, "img": img, "title": title}
+        post_meta = {
+            "post_id" : post_id,
+            "url" : url,
+            "img" : img,
+            "title" : title,
+            "solved" : solved
+        }
         post_metas.append(post_meta)
-        # user progress 추가 필요
 
-    return render_template(
-        "post-dashboard.html", post_metas=post_metas, pjt_name=pjt_name, members=members
-    )
-
+    return render_template("post-dashboard.html", post_metas = post_metas, pjt_name = pjt_name, members = members, user = g.user, progress_rate = progress_rate)
 
 @app.route("/post-form", methods=["GET"])
 def render_post_form():
