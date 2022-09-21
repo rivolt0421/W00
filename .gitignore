@@ -1,3 +1,5 @@
+# ignore all files in the build/ directory
+.venv/
 __pycache__/
 .empty/
 
