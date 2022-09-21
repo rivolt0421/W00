@@ -12,12 +12,12 @@ $(function () {
       $dropdown.removeClass('hidden').addClass('show');
     }
   });
-  $('body').onClick(function () {
-    if ($dropdown.hasClass('show')) {
-      $dropdown.addClass('hide').removeClass('show');
-      setTimeout(function () {
-        $dropdown.addClass('hidden');
-      }, 40);
-    }
-  });
+  // $('#user-menu-button').focusout(function () {
+  //   if ($dropdown.hasClass('show')) {
+  //     $dropdown.addClass('hide').removeClass('show');
+  //     setTimeout(function () {
+  //       $dropdown.addClass('hidden');
+  //     }, 40);
+  //   }
+  // });
 });
