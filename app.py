@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
 from functools import wraps
+from os import access
 from unittest import result
-from flask import Flask, jsonify, request, Response, g
+from flask import Flask, jsonify, request, Response, g ,redirect, url_for 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask import render_template
@@ -49,7 +50,7 @@ def get_post(post_id):
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        access_token = request.headers.get("Authorization")
+        access_token = request.args.get('token')
         if access_token is not None:
             try:
                 payload = jwt.decode(access_token, "MY_SECRET_KEY", "HS256")
@@ -57,14 +58,14 @@ def login_required(f):
                 payload = None
 
             if payload is None:
-                return Response(status=401)
+                return redirect(url_for('login'))
 
             user_id = payload["user_id"]
             # g: global context
             g.user_id = user_id
             g.user = get_user(user_id) if user_id else None
         else:
-            return Response(status=401)
+            return redirect(url_for('login'))
 
         return f(*args, **kwargs)
 
@@ -147,7 +148,8 @@ def post_modify(post_id):
 @app.route("/")
 @login_required
 def hello_world():
-    return "<p>Hello, World!</p>"
+    # return "hello"
+    return render_template("hello.html")
 
 
 @app.route("/users", methods=["GET"])
@@ -195,6 +197,13 @@ def sign_up():
 def render_sign_up_page():
     return render_template("signup.html")
 
+@app.route("/checkToken", methods=["GET"])
+def check_token():
+    return "hello"
+
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
 
 @app.route("/login", methods=["GET"])
 def render_login_page():
@@ -202,12 +211,17 @@ def render_login_page():
 
 
 @app.route("/projects", methods=["GET"])
+@login_required
 def render_prj_dashboard():
+  # 쿼리스트링으로 검증 아니면 메인
+    # token = request.args.get('token')
+
     projects = [
         {"aa": 1, "bb": 2},
         {"aa": 11, "bb": 12},
     ]
-    return render_template("prj_dashboard.html", projects=projects)
+
+    return render_template("dashboard.html" , projects=projects)
 
 
 @app.route("/projects", methods=["POST"])
@@ -257,12 +271,12 @@ def render_create_prj_page():
 
 @app.route("/login", methods=["POST"])
 def login():
-    credential = request.form
+    credential = request.json
     email = credential["email"]
     password = credential["password"]
 
     row = find_user_by_email(email)
-    if row == None or password != row["password"]:  # 단축 평가
+    if row == None or password != str(row["password"]):  # 단축 평가
         return "", 401  # Unauthorized
 
     user_id = str(row["_id"])

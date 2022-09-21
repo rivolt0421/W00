@@ -3,10 +3,12 @@
 - [x] email 중복 검증
 
 - [x] 인증 데코레이터
-- [ ] 데코레이터 적용하기
-- [ ] 클라이언트 jwt 쿠키에 저장
+- [x] 데코레이터 적용하기
+- [x] 클라이언트 jwt 쿠키에 저장
+- [x] 인증시 jwt는 쿼리스트링에 포함
+- [ ] 로그아웃 구현하기
 
-- [ ] bootstrap -> tailwind css
+- [x] bootstrap -> tailwind css
 - [ ] jinja2 정적 리소스 파일 분리
   
 - [ ] jinja2 문법
