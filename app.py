@@ -249,8 +249,11 @@ def login():
 def render_post_dashboard():
     pjt_id = "632a9ff17cdffa2611dbfb2c"
     project = get_project(pjt_id)
+    pjt_name = project["name"]
+    members = project["members"]
     posts = project["posts"]
     post_metas = []
+    
     for post_id in posts:
         post = get_post(post_id)
         url = post["url"]
@@ -259,7 +262,7 @@ def render_post_dashboard():
         post_metas.append(post_meta)
         # user progress 추가 필요
 
-    return render_template("post-dashboard.html", post_metas = post_metas)
+    return render_template("post-dashboard.html", post_metas = post_metas, pjt_name = pjt_name, members = members)
 
 @app.route("/post-form", methods=["GET"])
 def render_post_form():
