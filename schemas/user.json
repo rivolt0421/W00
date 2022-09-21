@@ -1,0 +1,18 @@
+{
+  "email": "",
+  "user name": "",
+  "password": "",
+  "description": "",
+  "progress": [
+    {
+      "projectId": "should be project's pk",
+      "solvedPosts": [ "post1", "post2", "post3", "post4" ],
+      "solved": true
+    },
+    {
+      "projectId": "bbb",
+      "solvedPosts": [ "post1", "post2", "post3" ],
+      "solved": false
+    }
+  ]
+}
