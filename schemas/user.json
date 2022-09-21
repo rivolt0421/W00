@@ -3,23 +3,16 @@
   "user name": "",
   "password": "",
   "description": "",
-  "projects": [
+  "progress": [
     {
-      "project": "should be project's pk",
-      "solvedQuiz": {
-        "post1": "solved",
-        "post2": "unsolved",
-        "post3": "solved",
-        "post4": "solved"
-      }
+      "projectId": "should be project's pk",
+      "solvedPosts": [ "post1", "post2", "post3", "post4" ],
+      "solved": true
     },
     {
-      "project": "bbb",
-      "progress": {
-        "post1": "unsolved",
-        "post2": "solved",
-        "post3": "solved"
-      }
+      "projectId": "bbb",
+      "solvedPosts": [ "post1", "post2", "post3" ],
+      "solved": false
     }
   ]
 }
