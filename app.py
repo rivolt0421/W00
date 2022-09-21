@@ -92,11 +92,22 @@ def do_scrap(url):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
     data = requests.get(url, headers=headers)
     soup = BeautifulSoup(data.text, 'html5lib')
-    img = soup.select_one('meta[property="og:image"]')['content'].strip()
-    title = soup.select_one('title').text
+    img = soup.select_one('meta[property="og:image"]')
+    title = soup.select_one('meta[property="og:title"]')
     
+    if title is None :
+        title = soup.select_one('title').text
+    else :
+        title = title['content']
+
+    if img is None :
+        img = ""
+    else :
+        img = img['content'].strip()
+
     return( 
-        {
+        {   
+            "url": url,
             "img": img,
             "title": title
         }
@@ -248,7 +259,7 @@ def render_post_dashboard():
         post_metas.append(post_meta)
         # user progress 추가 필요
 
-    return render_template("post-dashboard.html")
+    return render_template("post-dashboard.html", post_metas = post_metas)
 
 
 if __name__ == "__main__":
