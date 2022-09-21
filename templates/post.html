@@ -10,11 +10,12 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"
         integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <!-- css / js -->
-    <link rel="stylesheet" href="/static/css/dropdown.css">
-    <link rel="stylesheet" href="/static/css/progress-bar.css">
-    <link rel="stylesheet" href="/static/css/font.css">
-    <script src="/static/script/dropdown.js"></script>
-    <script src="/static/script/progress-bar.js"></script>
+    <script src="{{ url_for('static', filename='script/dropdown.js')}}"></script>
+    <script src="{{ url_for('static', filename='script/progress-bar.js')}}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css')}}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/progress-bar.css')}}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css')}}" />
+
 </head>
 
 <body class="h-full">
