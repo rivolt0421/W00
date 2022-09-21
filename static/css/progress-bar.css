@@ -1,0 +1,83 @@
+.skillbar {
+  font-family: "Open Sans", "sans-serif";
+  position: relative;
+  display: block;
+  margin-bottom: 15px;
+  width: 100%;
+  background: #eee;
+  height: 35px;
+  border-radius: 4px;
+  transition: 0.4s linear;
+  transition-property: width, background-color;
+}
+
+.skillbar-title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-weight: bold;
+  font-size: 16px;
+  color: #fff;
+  background: #6adcfa;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.skillbar-title span {
+  display: block;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 0 20px;
+  height: 35px;
+  line-height: 35px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.skillbar-bar {
+  height: 35px;
+  width: 0px;
+  background: #6adcfa;
+}
+
+.skill-bar-percent {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  font-size: 18px;
+  font-weight: 600;
+  height: 35px;
+  line-height: 35px;
+  color: rgba(0, 0, 0, 1);
+}
+
+@keyframes down {
+  from {
+    transform: rotate(180deg);
+  }
+
+  to {
+  }
+}
+
+@keyframes up {
+  from {
+  }
+
+  to {
+    transform: rotate(180deg);
+  }
+}
+
+.chevron-up {
+  animation-name: up;
+  animation-duration: 350ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+.chevron-down {
+  animation-name: down;
+  animation-duration: 350ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
