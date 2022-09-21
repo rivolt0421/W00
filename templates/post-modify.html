@@ -226,8 +226,9 @@
                 <div>
                     <div>
                         <div class="">
-                            <form action="#" method="POST"
+                            <form action="/update-post" method="POST"
                                 class="mt-5 grid md:grid-cols-2 md:gap-4 md:col-span-3 md:mt-0 bg-gray-200 p-4 rounded-md">
+                                <input hidden type="text" name="postid" value="{{ postid }}">
                                 <div class="shadow sm:overflow-hidden sm:rounded-md">
                                     <div class="h-full bg-white px-4 py-5 sm:p-6">
                                         <div class="grid grid-col-1 gap-6">
@@ -235,53 +236,32 @@
                                                 <legend class="text-xl font-bold">POST</legend>
                                             </div>
                                             <div>
-                                                <label for="company-website"
+                                                <label for="url"
                                                     class="block text-md font-medium text-gray-700">URL</label>
                                                 <div
                                                     class="box-border mt-1 mb-4 flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                    <input type="url" name="company-website" id="company-website"
+                                                    <input type="url" name="url" id="url"
                                                         class="p-2 text-xl block w-full flex-1 rounded-none rounded-x-md focus:outline-0"
                                                         placeholder="www.example.com" autocomplete="off"
-                                                        value="https://www.youtube.com/WldkhDd">
+                                                        value="{{ url }}">
                                                 </div>
                                             </div>
                                             <div>
+                                                {% for reason in reasons %}
                                                 <div>
-                                                    <label for="reason-1"
+                                                    <label for="reason-{{ loop.index }}"
                                                         class="block text-md font-medium text-gray-700">읽어야할 이유
-                                                        1.</label>
+                                                        {{ loop.index }}.</label>
                                                     <div
                                                         class="mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                        <input type="text" name="reason-1" id="reason-1"
+                                                        <input type="text" name="reason-{{ loop.index }}"
+                                                            id="reason-{{ loop.index }}"
                                                             class="p-2 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
                                                             autocomplete="off" placeholder="이유를 적어주세요."
-                                                            value="이유 첫번째...">
+                                                            value="{{ reason }}">
                                                     </div>
                                                 </div>
-                                                <div>
-                                                    <label for="reason-2"
-                                                        class="block text-md font-medium text-gray-700">읽어야할 이유
-                                                        2.</label>
-                                                    <div
-                                                        class="mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                        <input type="text" name="reason-2" id="reason-2"
-                                                            class="p-2 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                            autocomplete="off" placeholder="이유를 적어주세요."
-                                                            value="이유 두번째...">
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <label for="reason-3"
-                                                        class="block text-md font-medium text-gray-700">읽어야할 이유
-                                                        3.</label>
-                                                    <div
-                                                        class="mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                        <input type="text" name="reason-3" id="reason-3"
-                                                            class="p-2 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                            autocomplete="off" placeholder="이유를 적어주세요."
-                                                            value="이유 세번째...">
-                                                    </div>
-                                                </div>
+                                                {% endfor %}
                                             </div>
                                         </div>
                                     </div>
@@ -294,80 +274,47 @@
                                                 <div class="">
                                                     <legend class="text-xl font-bold">QUIZ</legend>
                                                 </div>
+                                                {% set cnt = namespace(value=1) %}
+                                                {% for quiz in quizs %}
+                                                {% if loop.index is odd %}
                                                 <div class="px-4">
                                                     <div class="flex mb-2">
-                                                        <label for="quiz-1"
-                                                            class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-500">Q1.</label>
+                                                        <label for="quiz-{{ cnt.value }}"
+                                                            class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-500">Q{{
+                                                            cnt.value }}.</label>
                                                         <div
                                                             class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                            <input type="text" name="quiz-1" id="quiz-1"
+                                                            <input type="text" name="quiz-{{ cnt.value }}"
+                                                                id="quiz-{{ cnt.value }}"
                                                                 class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="문제 1" value="문제 첫번째...">
+                                                                autocomplete="off" placeholder="문제 {{ cnt.value }}"
+                                                                value="{{ quizs[loop.index0] }}">
                                                         </div>
-
                                                     </div>
                                                     <div class="flex mb-2">
-                                                        <label for="answer-1"
-                                                            class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-500">A1.</label>
+                                                        <label for="answer-{{ cnt.value }}"
+                                                            class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-500">A{{
+                                                            cnt.value }}.</label>
                                                         <div
                                                             class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                            <input type="text" name="answer-1" id="answer-1"
+                                                            <input type="text" name="answer-{{ cnt.value }}"
+                                                                id="answer-{{ cnt.value }}"
                                                                 class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="정답 1" value="정답 첫번째...">
+                                                                autocomplete="off" placeholder="정답 {{ cnt.value }}"
+                                                                value="{{ quizs[loop.index0+1] }}">
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="px-4">
-                                                    <div class="flex mb-1">
-                                                        <label for="quiz-2"
-                                                            class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-500">Q2.</label>
-                                                        <div
-                                                            class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                            <input type="text" name="quiz-2" id="quiz-2"
-                                                                class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="문제 2" value="이유 두번째...">
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex mb-1">
-                                                        <label for="answer-2"
-                                                            class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-500">A2.</label>
-                                                        <div
-                                                            class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                            <input type="text" name="answer-2" id="answer-2"
-                                                                class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="정답 2" value="정답 두번째...">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="px-4">
-                                                    <div class="flex mb-1">
-                                                        <label for="quiz-3"
-                                                            class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-500">Q3.</label>
-                                                        <div
-                                                            class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                            <input type="text" name="quiz-3" id="quiz-3"
-                                                                class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="문제 3" value="이유 세번째...">
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex mb-1">
-                                                        <label for="answer-3"
-                                                            class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-500">A3.</label>
-                                                        <div
-                                                            class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                            <input type="text" name="answer-3" id="answer-3"
-                                                                class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="정답 3" value="정답 세번째...">
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                {% set cnt.value = cnt.value + 1 %}
+                                                {% endif %}
+                                                {% endfor %}
                                             </div>
                                         </div>
                                     </div>
 
                                 </div>
                                 <div class="col-start-2 text-right px-2">
-                                    <button type="button"
+                                    <button type="button" onClick="location.href='/post-dashboard'"
                                         class="mr-1 inline-flex justify-center rounded-md border border-transparent bg-gray-400 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">뒤로</button>
                                     <button type="button"
                                         class="mr-1 inline-flex justify-center rounded-md border border-transparent bg-rose-400 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">삭제</button>

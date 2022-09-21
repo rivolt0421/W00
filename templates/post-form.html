@@ -226,8 +226,9 @@
                 <div>
                     <div>
                         <div class="">
-                            <form action="#" method="POST"
+                            <form action="/create-post" method="POST"
                                 class="mt-5 grid md:grid-cols-2 md:gap-4 md:col-span-3 md:mt-0 bg-gray-200 p-4 rounded-md">
+                                <input hidden type="text" name="pjtid" value="{{ pjtid }}">
                                 <div class="shadow sm:overflow-hidden sm:rounded-md">
                                     <div class="h-full bg-white px-4 py-5 sm:p-6">
                                         <div class="grid grid-col-1 gap-6">
@@ -239,9 +240,9 @@
                                                     class="block text-md font-medium text-gray-700">URL</label>
                                                 <div
                                                     class="box-border mt-1 mb-4 flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                    <input type="url" name="company-website" id="company-website"
+                                                    <input type="url" name="url" id="url"
                                                         class="p-2 text-xl block w-full flex-1 rounded-none rounded-x-md focus:outline-0"
-                                                        placeholder="www.example.com" autocomplete="off">
+                                                        placeholder="www.example.com" autocomplete="off" required>
                                                 </div>
                                             </div>
                                             <div>
@@ -253,7 +254,7 @@
                                                         class="mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
                                                         <input type="text" name="reason-1" id="reason-1"
                                                             class="p-2 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                            autocomplete="off" placeholder="이유를 적어주세요.">
+                                                            autocomplete="off" placeholder="이유를 적어주세요." required>
                                                     </div>
                                                 </div>
                                                 <div>
@@ -264,7 +265,7 @@
                                                         class="mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
                                                         <input type="text" name="reason-2" id="reason-2"
                                                             class="p-2 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                            autocomplete="off" placeholder="이유를 적어주세요.">
+                                                            autocomplete="off" placeholder="이유를 적어주세요." required>
                                                     </div>
                                                 </div>
                                                 <div>
@@ -275,7 +276,7 @@
                                                         class="mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
                                                         <input type="text" name="reason-3" id="reason-3"
                                                             class="p-2 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                            autocomplete="off" placeholder="이유를 적어주세요.">
+                                                            autocomplete="off" placeholder="이유를 적어주세요." required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -298,7 +299,7 @@
                                                             class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
                                                             <input type="text" name="quiz-1" id="quiz-1"
                                                                 class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="문제 1">
+                                                                autocomplete="off" placeholder="문제 1" required>
                                                         </div>
 
                                                     </div>
@@ -309,7 +310,7 @@
                                                             class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
                                                             <input type="text" name="answer-1" id="answer-1"
                                                                 class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="정답 1">
+                                                                autocomplete="off" placeholder="정답 1" required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -321,7 +322,7 @@
                                                             class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
                                                             <input type="text" name="quiz-2" id="quiz-2"
                                                                 class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="문제 2">
+                                                                autocomplete="off" placeholder="문제 2" required>
                                                         </div>
                                                     </div>
                                                     <div class="flex mb-1">
@@ -331,7 +332,7 @@
                                                             class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
                                                             <input type="text" name="answer-2" id="answer-2"
                                                                 class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="정답 2">
+                                                                autocomplete="off" placeholder="정답 2" required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -343,7 +344,7 @@
                                                             class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
                                                             <input type="text" name="quiz-3" id="quiz-3"
                                                                 class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="문제 3">
+                                                                autocomplete="off" placeholder="문제 3" required>
                                                         </div>
                                                     </div>
                                                     <div class="flex mb-1">
@@ -353,7 +354,7 @@
                                                             class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
                                                             <input type="text" name="answer-3" id="answer-3"
                                                                 class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
-                                                                autocomplete="off" placeholder="정답 3">
+                                                                autocomplete="off" placeholder="정답 3" required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -381,9 +382,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
 
 
                 <!-- More products... -->

@@ -229,6 +229,7 @@
                         <div class="">
                             <form action="#" method="POST"
                                 class="mt-5 grid md:grid-cols-2 md:gap-4 md:col-span-3 md:mt-0 bg-gray-200 p-4 rounded-md">
+                                <input hidden type="text" name="postid" id="postid" value="{{ postid }}">
                                 <div class="shadow sm:overflow-hidden sm:rounded-md">
                                     <div class="h-full bg-white px-4 py-5 sm:p-6">
                                         <div class="grid grid-col-1 gap-6 w-full">
@@ -275,24 +276,24 @@
                                                 {% if loop.index is odd %}
                                                 <div class="px-4">
                                                     <div class="flex mb-2">
-                                                        <label for="quiz-{{ loop.index }}"
+                                                        <label for="quiz-{{ cnt.value }}"
                                                             class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-500">Q{{
                                                             cnt.value }}.</label>
                                                         <div class="grow mb-2 box-border flex rounded-sm">
-                                                            <input type="text" id="quiz-{{ loop.index }}"
+                                                            <input type="text" id="quiz-{{ cnt.value }}"
                                                                 class="bg-white p-1 text-lg block w-full flex-1 rounded-none rounded-r-md focus:outline-0 placeholder:text-base placeholder:italic"
                                                                 autocomplete="off" value="{{ quiz }}" readonly disabled>
                                                         </div>
 
                                                     </div>
                                                     <div class="flex mb-2">
-                                                        <label for="answer-{{ loop.index }}"
+                                                        <label for="answer-{{ cnt.value }}"
                                                             class="py-1 w-8 h-full block align-middle mr-2 flex-none text-xl font-medium text-gray-500">A{{
                                                             cnt.value }}.</label>
                                                         <div
                                                             class="grow mb-2 box-border flex rounded-sm border-b-2 border-gray-200 focus-within:border-b-2 focus-within:border-sky-500 transition ease-in-out">
-                                                            <input type="text" name="answer-{{ loop.index }}"
-                                                                id="answer-{{ loop.index }}"
+                                                            <input type="text" name="answer-{{ cnt.value }}"
+                                                                id="answer-{{ cnt.value }}"
                                                                 class="p-1 text-lg block w-full flex-1 rounded-none rounded-x-md focus:outline-0 placeholder:text-base placeholder:italic"
                                                                 autocomplete="off" placeholder="정답을 입력하세요.">
                                                         </div>
@@ -307,9 +308,11 @@
 
                                 </div>
                                 <div class="col-start-2 text-right px-2">
-                                    <button type="button"
+                                    <button type="button" onClick="location.href='/post-dashboard'"
                                         class="mr-1 inline-flex justify-center rounded-md border border-transparent bg-gray-400 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">뒤로</button>
-                                    <button type="submit"
+                                    <button type="button" onClick="location.href='/modify/{{ postid }}'"
+                                        class="mr-1 inline-flex justify-center rounded-md border border-transparent bg-rose-400 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">수정</button>
+                                    <button type="button" onClick="submit_quiz()"
                                         class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">제출</button>
                                 </div>
                             </form>
@@ -318,15 +321,68 @@
                 </div>
 
 
-
-
-
                 <!-- More products... -->
             </div>
             <!-- /End replace -->
     </div>
     </main>
     </div>
+    <script>
+        function submit_quiz() {
+            $postid = $('input#postid').val();
+            $ans1 = $('input#answer-1').val();
+            $ans2 = $('input#answer-2').val();
+            $ans3 = $('input#answer-3').val();
+            $.ajax({
+                type: "POST",
+                url: "/quiz-test",
+                data: { postid: $postid, answer1: $ans1, answer2: $ans2, answer3: $ans3 },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert('맞췄습니다!!');
+                        $.ajax({
+                            type: "POST",
+                            url: "/get-projectid",
+                            data: { postid: $postid },
+                            success: function (response) {
+                                $projectid = response['projectid'];
+
+                                update_solved_post($projectid, $postid, '{{ userid }}');
+                                window.location.href = "/post-dashboard";
+                            }
+                        })
+
+                    } else {
+                        alert('틀렸습니다!!');
+                    }
+                }
+            })
+        }
+        function get_projectid($postid) {
+            let projectid = ''
+            $.ajax({
+                type: "POST",
+                url: "/get-projectid",
+                data: { postid: $postid },
+                success: function (response) {
+                    projectid = response['projectid'];
+                }
+            })
+            return projectid;
+        }
+        function update_solved_post($projectid, $postid, $userid) {
+            console.log($projectid, $postid, $userid);
+            $.ajax({
+                type: "POST",
+                url: "/update-solved-post",
+                data: { projectid: $projectid, postid: $postid, userid: $userid },
+                success: function (response) {
+
+                }
+            })
+        }
+
+    </script>
 </body>
 <div>
 

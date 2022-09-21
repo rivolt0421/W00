@@ -18,7 +18,7 @@
 </head>
 
 <body class="h-full">
-    
+
     <!-- This example requires Tailwind CSS v2.0+ -->
     <!--
   This example requires updating your template:
@@ -206,15 +206,19 @@
                 <div class="mt-6 space-y-12 lg:grid lg:grid-cols-4 lg:gap-x-8 lg:space-y-0">
 
                     <div class="group relative mb-4">
-                        <a href="/post-form">                           
-                            <div class="bg-gray-100 p-4 relative h-80 w-full rounded-lg group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1">
-                                <div class="h-full w-full object-cover object-center border-4 flex justify-center items-center bg-gray-100 transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-110 duration-300 cursor-pointer">
+                        <a href="/postform/{{ pjt_id }}">
+                            <div
+                                class="bg-gray-100 p-4 relative h-80 w-full rounded-lg group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1">
+                                <div
+                                    class="h-full w-full object-cover object-center border-4 flex justify-center items-center bg-gray-100 transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-110 duration-300 cursor-pointer">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="w-12 h-12 stroke-gray-300">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                </svg>
+                                        stroke-width="1.5" stroke="currentColor" class="w-12 h-12 stroke-gray-300">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                </div>
                             </div>
-                        </div></a>
+                        </a>
 
                     </div>
 
@@ -233,23 +237,23 @@
                         </div>
                     </div>
 
-                        {% for item in post_metas %}
+                    {% for item in post_metas %}
                     <div class="group relative mb-4">
                         <div
                             class="border-4 border-green-400 relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1 transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-105 duration-300 cursor-pointer">
                             <div class="h-4/6">
-                                <a href= /post/{{ item.post_id }} target="_blank">                     
+                                <a href=/post/{{ item.post_id }} target="_blank">
                                     <img src={{ item.img }}
-                                    alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug."
-                                    class="h-full w-full object-cover object-center"></a>
-           
+                                        alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug."
+                                        class="h-full w-full object-cover object-center"></a>
+
                             </div>
                             <div class="h-2/6 p-4 font-bold">
                                 <text class="h-fit text-ellipsis overflow-hidden">{{ item.title }}</text>
                             </div>
                         </div>
                     </div>
-                        {% endfor %}
+                    {% endfor %}
 
                 </div>
 
