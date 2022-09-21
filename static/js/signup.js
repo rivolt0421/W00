@@ -4,8 +4,6 @@ $(function () {
   let $alert = $('#alertpwconfirm');
   let $pw = $('#password');
   let $pwConfirm = $('#password-confirm');
-  let $email = $('#email-address');
-  let $userName = $('#name');
 
   $("[type='submit']").click(function () {
     pw = $pw.val();
