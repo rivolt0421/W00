@@ -5,7 +5,11 @@ from flask import Flask, jsonify, request, Response, g
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask import render_template
+from bs4 import BeautifulSoup
+
 import jwt
+import requests
+
 
 app = Flask(__name__)
 
@@ -78,6 +82,47 @@ def post_detail(post_id):
     reasons = post['reasons']
     quizs = post['quizs']
     return render_template("post.html", url=url, reasons=reasons, quizs=quizs)
+def get_project(pjt_id):
+    project = db.projects.find_one({"_id": ObjectId(pjt_id)})
+
+    return (
+        {
+            "name": project["name"],
+            "members": project["members"],
+            "posts": project["posts"]
+        }
+        if project
+        else None
+    )
+
+def get_post(post_id):
+    post = db.posts.find_one({"_id": ObjectId(post_id)})
+
+    return (
+        {
+            "url": post["url"],
+            "project": post["project"],
+            "reasons": post["reasons"],
+            "quizs": post["quizs"]
+        }
+        if post
+        else None
+    )
+ 
+def do_scrap(url):
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+    data = requests.get(url, headers=headers)
+    soup = BeautifulSoup(data.text, 'html5lib')
+    img = soup.select_one('meta[property="og:image"]')['content'].strip()
+    title = soup.select_one('title').text
+    
+    return( 
+        {
+            "img": img,
+            "title": title
+        }
+    )    
+
 
 @app.route("/modify/<post_id>", methods=['GET'])
 #@login_required
@@ -218,6 +263,22 @@ def login():
     token = jwt.encode(payload, "MY_SECRET_KEY", "HS256")
     
     return jsonify({"access_token": token})
+
+@app.route("/post-dashboard", methods=["GET"])
+def render_post_dashboard():
+    pjt_id = "632a9ff17cdffa2611dbfb2c"
+    project = get_project(pjt_id)
+    posts = project["posts"]
+    post_metas = []
+    for post_id in posts:
+        post = get_post(post_id)
+        url = post["url"]
+
+        post_meta = do_scrap(url)
+        post_metas.append(post_meta)
+        # user progress 추가 필요
+
+    return render_template("post-dashboard.html")
 
 
 if __name__ == "__main__":
