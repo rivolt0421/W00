@@ -43,7 +43,7 @@
                   <button type="button"
                     class="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                    <span class="text-white mr-4 ml-2 text-lg">유저 이름</span>
+                    <span class="text-white mr-4 ml-2 text-lg">{{ user.name }}</span>
                     <img class="h-10 w-10 rounded-full"
                       src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                       alt="">
@@ -71,7 +71,7 @@
                     tabindex="-1" id="user-menu-item-1">문의사항</a>
 
                   <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-t-2 border-gray-200"
-                    role="menuitem" tabindex="-1" id="user-menu-item-2">로그아웃</a>
+                    role="menuitem" tabindex="-1" id="user-menu-item-2" onclick="logout()">로그아웃</a>
                 </div>
               </div>
             </div>
@@ -272,6 +272,7 @@
       [...$('#container').children()]
         .map(x => x.children[0])
         .forEach(x => { x.href += `?token=${token}` });
+
     })
 
 

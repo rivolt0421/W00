@@ -14,7 +14,7 @@ $(document).ready(function () {
 
     $.ajax({
       method: 'POST',
-      url: 'http://localhost:5000/login',
+      url: '/login',
       data: JSON.stringify({
         email: email,
         password: password,

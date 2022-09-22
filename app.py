@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import email
 from functools import wraps
+from math import floor
 from operator import truediv
 from os import access
 from unittest import result
@@ -80,16 +81,6 @@ def find_user_by_email(email):
     return db.users.find_one({"email": email})
 
 
-@app.route("/post/<post_id>", methods=["GET"])
-@login_required
-def post_detail(post_id):
-    post = db.posts.find_one({"_id": ObjectId(post_id)})
-    url = post["url"]
-    reasons = post["reasons"]
-    quizs = post["quizs"]
-    return render_template("post.html", url=url, reasons=reasons, quizs=quizs)
-
-
 def get_project(pjt_id):
     project = db.projects.find_one({"_id": ObjectId(pjt_id)})
 
@@ -141,123 +132,178 @@ def do_scrap(url):
 
     return {"img": img, "title": title}
 
+
 def insert_post(form):
     post = {
-    "url" : form['url'],
-    "project" : form['pjtid'],
-    "reasons" : [form['reason-1'], form['reason-2'], form['reason-3']],
-    "quizs" : [form['quiz-1'], form['answer-1'], form['quiz-2'], form['answer-2'], form['quiz-3'], form['answer-3']]
+        "url": form["url"],
+        "project": form["pjtid"],
+        "reasons": [form["reason-1"], form["reason-2"], form["reason-3"]],
+        "quizs": [
+            form["quiz-1"],
+            form["answer-1"],
+            form["quiz-2"],
+            form["answer-2"],
+            form["quiz-3"],
+            form["answer-3"],
+        ],
     }
     result = db.posts.insert_one(post)
     post_id = result.inserted_id
-    db.projects.update_one({"_id":ObjectId(form['pjtid'])},  { "$push": { "posts": post_id } })
+    db.projects.update_one(
+        {"_id": ObjectId(form["pjtid"])}, {"$push": {"posts": post_id}}
+    )
 
     return post_id
+
 
 def update_post_func(form):
-    post_id = form['postid']
+    post_id = form["postid"]
     post = {
-    "url" : form['url'],
-    "reasons" : [form['reason-1'], form['reason-2'], form['reason-3']],
-    "quizs" : [form['quiz-1'], form['answer-1'], form['quiz-2'], form['answer-2'], form['quiz-3'], form['answer-3']]
+        "url": form["url"],
+        "reasons": [form["reason-1"], form["reason-2"], form["reason-3"]],
+        "quizs": [
+            form["quiz-1"],
+            form["answer-1"],
+            form["quiz-2"],
+            form["answer-2"],
+            form["quiz-3"],
+            form["answer-3"],
+        ],
     }
 
-    db.posts.update_one({"_id":ObjectId(post_id)}, {"$set":post})
+    db.posts.update_one({"_id": ObjectId(post_id)}, {"$set": post})
 
     return post_id
 
 
-
-@app.route("/post/<post_id>", methods=['GET'])
+@app.route("/post/<post_id>", methods=["GET"])
 @login_required
 def post_detail(post_id):
-    post = db.posts.find_one({"_id" : ObjectId(post_id)})
-    url = post['url']
-    reasons = post['reasons']
-    quizs = post['quizs']
-    return render_template("post.html", url=url, reasons=reasons, quizs=quizs, postid=post_id, userid=g.user_id)
+    post = db.posts.find_one({"_id": ObjectId(post_id)})
+    project_id = post["project"]
+    url = post["url"]
+    reasons = post["reasons"]
+    quizs = post["quizs"]
+    return render_template(
+        "post.html",
+        url=url,
+        reasons=reasons,
+        quizs=quizs,
+        postid=post_id,
+        userid=g.user_id,
+        project_name= get_project(project_id)['name'],
+        project_id= project_id,
+        user=g.user
+    )
 
-@app.route("/quiz-test", methods=['POST'])
+
+@app.route("/quiz-test", methods=["POST"])
 def quiz_test():
     form = request.form
-    post_id = form['postid']
-    post = db.posts.find_one({"_id":ObjectId(post_id)})
-    ans1 = post['quizs'][1]
-    ans2 = post['quizs'][3]
-    ans3 = post['quizs'][5]
+    post_id = form["postid"]
+    post = db.posts.find_one({"_id": ObjectId(post_id)})
+    ans1 = post["quizs"][1]
+    ans2 = post["quizs"][3]
+    ans3 = post["quizs"][5]
 
-    if ans1 == form['answer1'] and ans2 == form['answer2'] and ans3 == form['answer3'] :
-        return {"result":"success"}
-    else :
-        return {"result":"fail"}
+    if ans1 == form["answer1"] and ans2 == form["answer2"] and ans3 == form["answer3"]:
+        return {"result": "success"}
+    else:
+        return {"result": "fail"}
 
-@app.route("/get-projectid", methods=['POST'])
+
+@app.route("/get-projectid", methods=["POST"])
 def get_projectid():
     form = request.form
-    post_id = form['postid']
-    post = db.posts.find_one({"_id":ObjectId(post_id)})
-    projectid = post['project']
+    post_id = form["postid"]
+    post = db.posts.find_one({"_id": ObjectId(post_id)})
+    projectid = post["project"]
 
-    return {"projectid" : projectid}
+    return {"projectid": projectid}
 
-@app.route("/update-solved-post", methods=['POST'])
+
+@app.route("/update-solved-post", methods=["POST"])
 def update_sovled_post():
     form = request.form
     print(form)
-    post_id = form['postid']
-    project_id = form['projectid']
-    user_id = form['userid']
+    post_id = form["postid"]
+    project_id = form["projectid"]
+    user_id = form["userid"]
 
-    user = db.users.find_one({ "_id" : ObjectId(user_id)})
-    progress = user['progress']
+    user = db.users.find_one({"_id": ObjectId(user_id)})
+    progress = user["progress"]
     print(progress)
 
     for i, p in enumerate(progress):
-        if p['projectId'] == project_id :
-           db.users.update_one({ "_id" : ObjectId(user_id)},{"$push": {f"progress.{i}.solvedPosts": post_id}})
-           return {"result":"success"}
+        if p["projectId"] == project_id:
+            if post_id in p["solvedPosts"]:
+                return {"result": "fail"}
+            db.users.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$push": {f"progress.{i}.solvedPosts": post_id}},
+            )
+            return {"result": "success"}
 
-    return {"result":"fail"}
+    return {"result": "fail"}
 
-@app.route("/postform/<pjtid>", methods=['GET'])
-#@login_required
+
+@app.route("/postform/<pjtid>", methods=["GET"])
+@login_required
 def post_form(pjtid):
-    return render_template("post-form.html", pjtid=pjtid)
+    
+    return render_template("post-form.html", pjtid=pjtid, user=g.user, project_name=get_project(pjtid)["name"])
 
-@app.route("/create-post", methods=['POST'])
-#@login_required
+
+@app.route("/create-post", methods=["POST"])
+@login_required
 def create_post():
     form = request.form
+    
     post_id = insert_post(form)
+    access_token = request.args.get("token")
 
-    return redirect(f"/post/{post_id}")
+    return redirect(f"/post/{post_id}?token={access_token}")
+
+
 def get_single_progress(user, pjt_id):
     for single_progress in user["progress"]:
         if single_progress["projectId"] == pjt_id:
-            return single_progress 
+            return single_progress
+
 
 def get_progress_rate(single_pjt_user, project):
-    progress_rate = single_pjt_user["solvedPosts"].__len__() / project["posts"].__len__()  
+    progress_rate = (
+        (single_pjt_user["solvedPosts"].__len__() / project["posts"].__len__())
+        if project["posts"].__len__() != 0
+        else 0
+    )
     progress_rate *= 100
-    return str(progress_rate) + '%'
+    return str(floor(progress_rate)) + "%"
 
 
 @app.route("/modify/<post_id>", methods=["GET"])
-# @login_required
+@login_required
 def post_modify(post_id):
-    post = db.posts.find_one({"_id" : ObjectId(post_id)})
-    url = post['url']
-    reasons = post['reasons']
-    quizs = post['quizs']
-    return render_template("post-modify.html", url=url, reasons=reasons, quizs=quizs, postid=post_id)
+    post = db.posts.find_one({"_id": ObjectId(post_id)})
+    url = post["url"]
+    reasons = post["reasons"]
+    quizs = post["quizs"]
+    project_id=post['project']
+    project_name= get_project(project_id)['name']
 
-@app.route("/update-post", methods=['POST'])
-#@login_required
+    return render_template(
+        "post-modify.html", url=url, reasons=reasons, quizs=quizs, postid=post_id, project_name= project_name, project_id= project_id
+    ,user=g.user)
+
+
+@app.route("/update-post", methods=["POST"])
+@login_required
 def update_post():
     form = request.form
     post_id = update_post_func(form)
+    access_token = request.args.get("token")
 
-    return redirect(f"/post/{post_id}")
+    return redirect(f"/post/{post_id}?token={access_token}")
 
 
 @app.route("/users", methods=["GET"])
@@ -350,7 +396,7 @@ def render_prj_dashboard():
     progress = current_user["progress"]
     result = list(map(convert_progress, progress))
 
-    return render_template("dashboard.html", projects=result)
+    return render_template("dashboard.html", projects=result, user=g.user)
 
 
 @app.route("/projects", methods=["POST"])
@@ -394,8 +440,9 @@ def create_project():
 
 
 @app.route("/create-project", methods=["GET"])
+@login_required
 def render_create_prj_page():
-    return render_template("create_project.html")
+    return render_template("create_project.html", user=g.user)
 
 
 @app.route("/login", methods=["POST"])
@@ -406,7 +453,7 @@ def login():
 
     row = find_user_by_email(email)
     if row == None or password != str(row["password"]):  # 단축 평가
-        return "", 401                                   # Unauthorized
+        return "", 401  # Unauthorized
 
     user_id = str(row["_id"])
     payload = {
@@ -430,9 +477,9 @@ def render_post_dashboard(pjt_id):
     post_metas = []
     single_pjt_guser = []
 
-    members = list(filter(lambda m: m['email']!=g.user['email'],members))
+    members = list(filter(lambda m: m["email"] != g.user["email"], members))
 
-    #   progress rate = g.user[length of solvedposts] / project[length of posts] 
+    #   progress rate = g.user[length of solvedposts] / project[length of posts]
     #   solved post 에 post id 있으면 solved --> post_mata에 포함
 
     single_pjt_guser = get_single_progress(g.user, pjt_id)
@@ -440,10 +487,9 @@ def render_post_dashboard(pjt_id):
         user = find_user_by_email(member["email"])
         single_pjt_member = get_single_progress(user, pjt_id)
         member_progress_rate = get_progress_rate(single_pjt_member, project)
-        member['progress_rate'] = member_progress_rate
+        member["progress_rate"] = member_progress_rate
 
     progress_rate = get_progress_rate(single_pjt_guser, project)
-
 
     for post_id in posts:
         post = get_post(post_id)
@@ -453,24 +499,30 @@ def render_post_dashboard(pjt_id):
         img = url_meta["img"]
         title = url_meta["title"]
         solved = "unsolved"
-        if post_id in single_pjt_guser["solvedPosts"]:
+        if str(post_id) in single_pjt_guser["solvedPosts"]:
             solved = "solved"
-        # member 
+        # member
 
         post_meta = {
-            "post_id" : post_id,
-            "url" : url,
-            "img" : img,
-            "title" : title,
-            "solved" : solved
+            "post_id": post_id,
+            "url": url,
+            "img": img,
+            "title": title,
+            "solved": solved,
         }
         post_metas.append(post_meta)
 
-    return render_template("post-dashboard.html", post_metas = post_metas, pjt_name = pjt_name, members = members, user = g.user, progress_rate = progress_rate)
+    return render_template(
+        "post-dashboard.html",
+        post_metas=post_metas,
+        pjt_name=pjt_name,
+        pjt_id=pjt_id,
+        members=members,
+        user=g.user,
+        progress_rate=progress_rate,
+    )
 
-@app.route("/post-form", methods=["GET"])
-def render_post_form():
-    return render_template("post-form.html")
+
 
 
 if __name__ == "__main__":
